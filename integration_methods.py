@@ -8,7 +8,7 @@ class IntegrationMethod:
         raise Exception("Method isn't overridden")
 
     def integrate_with_precision(self, func: Function, left: float, right: float, precision: float,
-                                 start_number_of_steps: int = 5, steps_limit: int = 1_000_000) -> [float, int]:
+                                 start_number_of_steps: int = 4, steps_limit: int = 1_000_000) -> [float, int]:
         assert left < right, "Invalid interval"
         prev_result: float = self.integrate(func, left, right, number_of_steps=start_number_of_steps)
         cur_result: float
