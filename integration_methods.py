@@ -4,11 +4,11 @@ from functions import *
 class IntegrationMethod:
     _string: str = ""
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 5) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         raise Exception("Method isn't overridden")
 
     def integrate_with_precision(self, func: Function, left: float, right: float, precision: float,
-                                 start_number_of_steps: int = 5, steps_limit: int = 500_000) -> [float, int]:
+                                 start_number_of_steps: int = 5, steps_limit: int = 1_000_000) -> [float, int]:
         assert left < right, "Invalid interval"
         prev_result: float = self.integrate(func, left, right, number_of_steps=start_number_of_steps)
         cur_result: float
@@ -17,6 +17,7 @@ class IntegrationMethod:
             cur_result = self.integrate(func, left, right, number_of_steps=start_number_of_steps)
             if abs(prev_result - cur_result) <= precision:
                 return [cur_result, start_number_of_steps]
+            prev_result = cur_result
         raise Exception(f"Can't reach precision {precision}")
 
     def __str__(self):
@@ -26,7 +27,7 @@ class IntegrationMethod:
 class LeftRectangleMethod(IntegrationMethod):
     _string: str = "left rectangle method"
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 5) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         step: float = (right - left) / number_of_steps
         start: float = left
         result: float = 0
@@ -39,7 +40,7 @@ class LeftRectangleMethod(IntegrationMethod):
 class RightRectangleMethod(IntegrationMethod):
     _string: str = "right rectangle method"
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 5) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         step: float = (right - left) / number_of_steps
         start: float = left + step
         result: float = 0
@@ -52,7 +53,7 @@ class RightRectangleMethod(IntegrationMethod):
 class MiddleRectangleMethod(IntegrationMethod):
     _string: str = "middle rectangle method"
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 5) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         step: float = (right - left) / number_of_steps
         start: float = left + step / 2
         result: float = 0
@@ -65,7 +66,7 @@ class MiddleRectangleMethod(IntegrationMethod):
 class TrapezoidMethod(IntegrationMethod):
     _string: str = "trapezoid method"
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 5) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         step: float = (right - left) / number_of_steps
         start: float = left + step
         result: float = func.at(left) + func.at(right)
@@ -78,7 +79,7 @@ class TrapezoidMethod(IntegrationMethod):
 class SimpsonMethod(IntegrationMethod):
     _string: str = "simpson method"
 
-    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 6) -> float:
+    def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         assert number_of_steps % 2 == 0, "can use only even number_of_steps in this method"
         step: float = (right - left) / number_of_steps
         start: float = left + step
