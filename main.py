@@ -23,57 +23,20 @@ def choose_function() -> Function:
 
 def read_interval() -> [float, float]:
     line = input("\nEnter the interval boundaries:\n").strip()
-    interval: [float, float]
-    try:
-        interval = [float(x) for x in line.split()]
-        if len(interval) != 2 or interval[1] < interval[0]:
-            raise Exception("not an interval")
-    except Exception as _:
-        interval = read_interval_from_file(line)
+    interval = [float(x) for x in line.split()]
+    if len(interval) != 2 or interval[1] < interval[0]:
+        raise Exception("not an interval")
     return interval
-
-
-def read_interval_from_file(filename: str):
-    frame: pd.DataFrame
-    try:
-        frame = pd.read_csv(filename, header=None)
-        validate_interval_precision(frame)
-    except Exception as e:
-        raise Exception("file \"" + filename + "\" can't be opened: " + e.__str__())
-    return frame.values
-
-
-def validate_interval_precision(frame: pd.DataFrame):
-    if len(frame) != 1 or len(frame[0]) != 2 or not isinstance(frame[0][0], np.float) \
-            or not isinstance(frame[0][1], np.float) or frame[0][1] < frame[0][0]:
-        raise Exception("must contains only two float numbers (forming interval)")
 
 
 def read_precision() -> float:
     line = input("\nEnter the precision:\n").strip()
-    precision: float
-    try:
-        precision = float(line)
-        if precision <= 0:
-            raise Exception("precision must be positive")
-    except Exception as _:
-        precision = read_precision_from_file(line)
+    precision = float(line)
+    if precision <= 0:
+        raise Exception("precision must be positive")
+    if precision <= 1e-15:
+        raise Exception("precision is too small")
     return precision
-
-
-def read_precision_from_file(filename: str):
-    frame: pd.DataFrame
-    try:
-        frame = pd.read_csv(filename, header=None)
-        validate_file_precision(frame)
-    except Exception as e:
-        raise Exception("file \"" + filename + "\" can't be opened: " + e.__str__())
-    return frame[0][0]
-
-
-def validate_file_precision(frame: pd.DataFrame):
-    if len(frame) != 1 or len(frame[0]) != 1 or not isinstance(frame[0][0], np.float) or frame[0][0] <= 0:
-        raise Exception("must contains only one number (positive float)")
 
 
 def choose_method() -> IntegrationMethod:
