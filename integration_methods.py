@@ -28,6 +28,7 @@ class LeftRectangleMethod(IntegrationMethod):
     _string: str = "left rectangle method"
 
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
+        assert number_of_steps != 0, "0 number of steps?????"
         step: float = (right - left) / number_of_steps
         start: float = left
         result: float = 0
@@ -41,6 +42,7 @@ class RightRectangleMethod(IntegrationMethod):
     _string: str = "right rectangle method"
 
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
+        assert number_of_steps != 0, "0 number of steps?????"
         step: float = (right - left) / number_of_steps
         start: float = left + step
         result: float = 0
@@ -54,6 +56,7 @@ class MiddleRectangleMethod(IntegrationMethod):
     _string: str = "middle rectangle method"
 
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
+        assert number_of_steps != 0, "0 number of steps?????"
         step: float = (right - left) / number_of_steps
         start: float = left + step / 2
         result: float = 0
@@ -67,6 +70,7 @@ class TrapezoidMethod(IntegrationMethod):
     _string: str = "trapezoid method"
 
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
+        assert number_of_steps != 0, "0 number of steps?????"
         step: float = (right - left) / number_of_steps
         start: float = left + step
         result: float = func.at(left) + func.at(right)
@@ -81,6 +85,7 @@ class SimpsonMethod(IntegrationMethod):
 
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         assert number_of_steps % 2 == 0, "can use only even number_of_steps in this method"
+        assert number_of_steps != 0, "0 number of steps?????"
         step: float = (right - left) / number_of_steps
         start: float = left + step
         result: float = func.at(left) + func.at(right)
