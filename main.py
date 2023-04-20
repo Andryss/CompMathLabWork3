@@ -1,4 +1,5 @@
 import sys
+from PIL import Image
 
 from integration_methods import *
 
@@ -16,6 +17,15 @@ def choose_function() -> Function:
         return functions[idx]
     except Exception as e:
         raise Exception("can't choose the function: " + e.__str__())
+
+
+def show_function(function: Function):
+    try:
+        image = Image.open(function.image_path())
+        image.show(function.__str__())
+        print(f"\nI drawn a plot for you, look at It before continue.")
+    except Exception as e:
+        print(f"\nI can't a plot for you: {e.__str__()}")
 
 
 def read_interval() -> [float, float]:
@@ -61,6 +71,7 @@ def print_result(method: IntegrationMethod, number_of_steps: int, result: float)
 def run():
     try:
         function: Function = choose_function()
+        show_function(function)
         [left, right] = read_interval()
 
         precision: float = read_precision()
