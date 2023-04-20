@@ -7,9 +7,18 @@ class IntegrationMethod:
     def integrate(self, func: Function, left: float, right: float, number_of_steps: int = 4) -> float:
         raise Exception("Method isn't overridden")
 
+    @staticmethod
+    def has_dead_points_on_interval(func: Function, left: float, right: float) -> bool:
+        for point in func.dead_points():
+            if left <= point <= right:
+                return True
+        return False
+
     def integrate_with_precision(self, func: Function, left: float, right: float, precision: float,
                                  start_number_of_steps: int = 4, steps_limit: int = 1_000_000) -> [float, int]:
         assert left < right, "Invalid interval"
+        if IntegrationMethod.has_dead_points_on_interval(func, left, right):
+            raise Exception(f"Integral doesn't exist on interval [{left}, {right}]")
         prev_result: float = self.integrate(func, left, right, number_of_steps=start_number_of_steps)
         cur_result: float
         while start_number_of_steps < steps_limit:
