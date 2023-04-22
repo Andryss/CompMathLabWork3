@@ -61,11 +61,15 @@ def choose_method() -> IntegrationMethod:
         raise Exception("can't choose the method: " + e.__str__())
 
 
-def print_result(method: IntegrationMethod, number_of_steps: int, result: float):
+def print_result(method: IntegrationMethod, result: IntegrationResult):
     print("\nHere is the computation result:")
-    print(f"In case of using {method}:")
-    print(f"1) interval was divided into {number_of_steps} parts")
-    print(f"2) integral is equal to {result}")
+    if result.is_integrated_with_dead_points:
+        print(f"Integral was computed analytically")
+        print(f"Integral is equal to {result.integral_value}")
+    else:
+        print(f"In case of using {method}:")
+        print(f"1) interval was divided into {result.number_of_steps} parts")
+        print(f"2) integral is equal to {result.integral_value}")
 
 
 def run():
@@ -76,8 +80,8 @@ def run():
 
         precision: float = read_precision()
         method: IntegrationMethod = choose_method()
-        [result, number_of_steps] = method.integrate_with_precision(function, left, right, precision=precision)
-        print_result(method, number_of_steps, result)
+        result = method.integrate_with_precision(function, left, right, precision=precision)
+        print_result(method, result)
     except Exception as e:
         print(e, file=sys.stderr)
 
